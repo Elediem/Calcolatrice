@@ -2,78 +2,157 @@ $(document).ready(function () {
 	var expr = [];
 	var text = $("#op");
 	var prec;
-	var punto=false;
-	text.click(function () {
-		text.val("");
-		punto=false;
+	var punto = false;
+	$(document).keypress(function (ev) {
+		switch (ev.which) {
+			case 99:
+				canc();
+				break;
+			case 48 :
+				insNum("0");
+				break;
+			case 49 :
+				insNum("1");
+				break;
+			case 50 :
+				insNum("2");
+				break;
+			case 51 :
+				insNum("3");
+				break;
+			case 52 :
+				insNum("4");
+				break;
+			case 53 :
+				insNum("5");
+				break;
+			case 54 :
+				insNum("6");
+				break;
+			case 55 :
+				insNum("7");
+				break;
+			case 56 :
+				insNum("8");
+				break;
+			case 57:
+				insNum("9");
+				break;
+			case 42:
+				molti();
+				break;
+			case 43:
+				somma();
+				break;
+			case 45:
+				sottr();
+				break;
+			case 46:
+				dec();
+				break;
+			case 47:
+				divis();
+				break;
+			case 13:
+				ugual();
+				break;
+
+
+		}
 	});
 	$("#somma").click(function () {
+		somma();
+	});
+	$("#sottr").click(function () {
+		sottr();
+	});
+	$("#molti").click(function () {
+		molti();
+	});
+	$("#divis").click(function () {
+		divis();
+	});
+	$("#ugual").click(function () {
+		ugual();
+	});
+	$("#canc").click(function () {
+		canc();
+	});
+	$("#punto").click(function () {
+		dec();
+	});
+	$("[name]").click(function () {
+		insNum(this.innerHTML);
+	});
+	var somma = function () {
 		if (prec !== '+' && prec !== '-' && prec !== '/' && prec !== '*') {
 			expr[0] = text.val();
 			expr[1] = '+';
 			text.val("");
-			punto=false;
-			prec = this.innerHTML;
+			punto = false;
+			prec = "+";
 		}
-	});
-	$("#sottr").click(function () {
+	};
+	var sottr = function () {
 		if (prec !== '+' && prec !== '-' && prec !== '/' && prec !== '*') {
 			expr[0] = text.val();
 			expr[1] = '-';
 			text.val("");
-			punto=false;
-			prec = this.innerHTML;
+			punto = false;
+			prec = "-";
 		}
-	});
-	$("#molti").click(function () {
+	};
+	var insNum = function (n) {
+		if (prec === "=") {
+			punto = false;
+			text.val("");
+			text.val(n);
+		} else if (!(text.val() === "0" && n === "0")) {
+			text.val(text.val() + n);
+		}
+		prec = n;
+	};
+	var molti = function () {
 		if (prec !== '+' && prec !== '-' && prec !== '/' && prec !== '*') {
 			expr[0] = text.val();
 			expr[1] = '*';
 			text.val("");
-			punto=false;
-			prec = this.innerHTML;
+			punto = false;
+			prec = "*";
 		}
-	});
-	$("#divis").click(function () {
+	};
+	var divis = function () {
 		if (prec !== '+' && prec !== '-' && prec !== '/' && prec !== '*') {
 			expr[0] = text.val();
 			expr[1] = '/';
 			text.val("");
-			punto=false;
-			prec = this.innerHTML;
+			punto = false;
+			prec = "/";
 		}
-	});
-	$("#ugual").click(function () {
+	};
+	var ugual = function () {
 		expr[2] = text.val();
-		text.val(calcolo());
-		prec = this.innerHTML;
-	});
-	$("#canc").click(function(){
-		expr=[];
-		punto=false;
+		text.val(calcolo()); 
+		punto = false;
+		prec = "=";
+	};
+	var canc = function () {
+		expr = [];
+		punto = false;
 		text.val("");
-		prec = this.innerHTML;
-	});
-	$("#punto").click(function(){
+		prec = "canc";
+	};
+	var dec = function () {
 		if (!punto) {
-			punto=true;
-			if (prec==="=") {
-				text.val(this.innerHTML);
-			}else{
-				text.val(text.val() + this.innerHTML);
+			punto = true;
+			if (prec === "=") {
+				text.val(".");
+			} else {
+				text.val(text.val() + ".");
 			}
 		}
-		prec = this.innerHTML;
-	});
-	$("[name]").click(function () {
-		if (prec === "=") {
-			punto=false;
-			text.val(this.innerHTML);
-		} else if (!(text.val() === "0" && this.innerHTML === "0")) {
-			text.val(text.val() + this.innerHTML);
-		}
-		prec = this.innerHTML;
-	});
+		prec = ".";
+	};
 	var calcolo = function () {
 		var ris = 0;
 		switch (expr[1]) {
